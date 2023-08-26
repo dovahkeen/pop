@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StudentStoreRequest;
+use App\Http\Requests\Student\StudentStoreRequest;
 use App\Http\Resources\StudentResource;
 use App\Models\Student;
 use App\Traits\Crud;

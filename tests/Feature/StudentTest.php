@@ -15,11 +15,11 @@ class StudentTest extends TestCase
     {
         $username = $this->faker->unique()->userName;
 
-        $existingStudent = Student::factory()->create();
-
         $response = $this->postJson('/api/student', [
-            'username' => $username,
-            // ... other required data ...
+            'full_name' => $this->faker->name,
+            'grade'     => $this->faker->numberBetween(0, 12),
+            'username'  => $this->faker->userName,
+            'password'  => $this->faker->password(6, 8),
         ]);
 
         $response->assertStatus(201);
