@@ -1,0 +1,51 @@
+version: '3.3'
+
+services:
+
+  api:
+    image: montebal/laradev:php80-2204
+    build:
+      context: ../
+      dockerfile: docker/dev.Dockerfile
+    container_name: pop_api
+    ports:
+      - ${HOST_HTTP_PORT}:80
+    environment:
+      XDEBUG_TRIGGER: "docker-pop"
+      PHP_IDE_CONFIG: "serverName=docker-pop"
+    volumes:
+      - ./../:/var/www/html
+      - pop-api-vendor:/var/www/html/vendor
+    networks:
+      pop:
+
+
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - ${SQL_PORT}:3306
+    volumes:
+      - pop-db:/var/lib/mysql
+    networks:
+      pop:
+
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - ${PHPMYADMIN_PORT}:80
+    links:
+      - mysql:db
+    networks:
+      pop:
+
+volumes:
+  pop-db:
+    external: false
+  pop-api-vendor:
+    external: false
+
+networks:
+  pop:
