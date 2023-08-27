@@ -41,6 +41,7 @@ class StudentController extends Controller
      */
     public function store(StudentStoreRequest $request): JsonResponse
     {
+        // todo: Call to a member function fill() on string
         return $this->saveInstance($request->validated());
     }
 
