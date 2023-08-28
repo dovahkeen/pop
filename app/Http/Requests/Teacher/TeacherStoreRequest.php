@@ -16,7 +16,7 @@ class TeacherStoreRequest extends FormRequest
         return [
             'username'  => 'string|required',
             'password'  => 'string|required|min:6',
-            'full_name' => 'string',
+            'fullName'  => 'string',
             'email'     => 'email|required'
         ];
     }

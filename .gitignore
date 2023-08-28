@@ -5,7 +5,8 @@
 /public/storage
 /storage/*.key
 /vendor
-/.env
+# env is commented out for ease of use for a home assignment only!
+#.env
 .env.backup
 .env.production
 .phpunit.result.cache

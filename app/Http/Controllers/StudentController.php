@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StudentStoreRequest;
+use App\Http\Requests\Student\StudentStoreRequest;
 use App\Http\Resources\StudentResource;
 use App\Models\Student;
 use App\Traits\Crud;
@@ -41,6 +41,7 @@ class StudentController extends Controller
      */
     public function store(StudentStoreRequest $request): JsonResponse
     {
+        // todo: Call to a member function fill() on string
         return $this->saveInstance($request->validated());
     }
 

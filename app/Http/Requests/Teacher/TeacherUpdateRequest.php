@@ -22,7 +22,7 @@ class TeacherUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'full_name' => 'string',
+            'fullName'  => 'string',
             'email'     => 'email|required'
         ];
     }

@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Exception;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
 
 trait Crud
 {
@@ -48,7 +49,7 @@ trait Crud
     {
         try {
             $this->getModel()->fill($values)->save();
-            return $this->responseSuccess();
+            return $this->responseSuccess(Response::HTTP_CREATED);
         } catch (Exception $exception) {
             return $this->responseFailed($exception);
         }

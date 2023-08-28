@@ -29,8 +29,8 @@ class Controller extends BaseController
         return response()->json($exception, Response::HTTP_BAD_REQUEST);
     }
 
-    public function responseSuccess(): JsonResponse
+    public function responseSuccess(int $status = Response::HTTP_OK): JsonResponse
     {
-        return response()->json(['message' => 'success']);
+        return response()->json(['message' => 'success'], $status);
     }
 }
