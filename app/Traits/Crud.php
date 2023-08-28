@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Exception;
@@ -48,7 +49,9 @@ trait Crud
     public function saveInstance(array $values): JsonResponse
     {
         try {
-            $this->getModel()->fill($values)->save();
+            $model = $this->getModel();
+            $modelInstance = new $model($values);
+            $modelInstance->save();
             return $this->responseSuccess(Response::HTTP_CREATED);
         } catch (Exception $exception) {
             return $this->responseFailed($exception);
@@ -63,7 +66,6 @@ trait Crud
 
     private function getModel(): string|Model
     {
-        $modelName = class_basename(Str::singular(Str::replace(class_basename(self::class), null, static::class)));
-        return "App\\Models\\$modelName";
+        return $this->model;
     }
 }

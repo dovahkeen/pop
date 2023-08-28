@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\Student\StudentStoreRequest;
 use App\Http\Resources\StudentResource;
 use App\Models\Student;
 use App\Traits\Crud;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
     use Crud;
 
+    protected string $model = Student::class;
     /**
      * Display a listing of the resource.
      * Method getModel will return a model by the requested controller name.
@@ -41,7 +44,6 @@ class StudentController extends Controller
      */
     public function store(StudentStoreRequest $request): JsonResponse
     {
-        // todo: Call to a member function fill() on string
         return $this->saveInstance($request->validated());
     }
 
@@ -75,5 +77,17 @@ class StudentController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function login(LoginRequest $request)
+    {
+        // todo: return a token or something...
+        $wow = Auth::guard('students')->attempt($request->validated());
+        if (Auth::guard('student')->attempt($request->validated())) {
+            $request->session()->regenerate();
+
+            return redirect()->intended('dashboard');
+        }
+
     }
 }

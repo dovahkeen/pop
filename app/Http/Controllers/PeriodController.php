@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PeriodStoreRequest;
+use App\Http\Requests\Period\PeriodStoreRequest;
 use App\Models\Period;
 use App\Traits\Crud;
 use Illuminate\Http\JsonResponse;
@@ -10,6 +10,8 @@ use Illuminate\Http\JsonResponse;
 class PeriodController extends Controller
 {
     use Crud;
+
+    protected string $model = Period::class;
 
     public function getByTeacher(int $teacherId): JsonResponse
     {

@@ -8,16 +8,16 @@ class TeacherStoreRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     public function rules(): array
     {
         return [
-            'username'  => 'string|required',
-            'password'  => 'string|required|min:6',
-            'fullName'  => 'string',
-            'email'     => 'email|required'
+            'username'  => 'required|string',
+            'password'  => 'required|string|min:6',
+            'full_name' => 'required|string',
+            'email'     => 'required|email'
         ];
     }
 }

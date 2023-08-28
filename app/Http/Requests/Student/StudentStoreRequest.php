@@ -16,7 +16,7 @@ class StudentStoreRequest extends FormRequest
         return [
             'username'  => 'string|required',
             'password'  => 'string|required|min:6',
-            'fullName'  => 'string',
+            'full_name' => 'string',
             'grade'     => 'int|required|between:0,12'
         ];
     }

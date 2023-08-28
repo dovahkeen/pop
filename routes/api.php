@@ -32,3 +32,6 @@ Route::resources([
 Route::get('period/teacher/{teacherId}', [PeriodController::class, 'getByTeacher']);
 Route::get('student/period/{periodId}', [StudentController::class, 'index']);
 Route::get('student/period/{periodId}/teacher/{teacherId}', [StudentController::class, 'index']);
+
+Route::post('teacher/login', [TeacherController::class, 'login']);
+Route::post('student/login', [StudentController::class, 'login']);
