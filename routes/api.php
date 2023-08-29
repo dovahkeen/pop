@@ -17,21 +17,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('teacher', [TeacherController::class, 'store']);
+Route::post('student', [StudentController::class, 'store']);
+
+Route::post('teacher/login', [TeacherController::class, 'login']);
+Route::post('student/login', [StudentController::class, 'login']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Route::post('login', '')
+Route::middleware('auth:sanctum')->group(function(){
 
-Route::resources([
-    'teacher' => TeacherController::class,
-    'student' => StudentController::class,
-    'period'  => PeriodController::class
-]);
+    Route::resource('teacher', TeacherController::class)->except(['store']);
+    Route::resource('student', StudentController::class)->except(['store']);
+    Route::resource('period', PeriodController::class);
 
-Route::get('period/teacher/{teacherId}', [PeriodController::class, 'getByTeacher']);
-Route::get('student/period/{periodId}', [StudentController::class, 'index']);
-Route::get('student/period/{periodId}/teacher/{teacherId}', [StudentController::class, 'index']);
+    Route::get('period/teacher/{teacherId}', [PeriodController::class, 'getByTeacher']);
+    Route::get('student/period/{periodId}', [StudentController::class, 'index']);
+    Route::get('student/period/{periodId}/teacher/{teacherId}', [StudentController::class, 'index']);
 
-Route::post('teacher/login', [TeacherController::class, 'login']);
-Route::post('student/login', [StudentController::class, 'login']);
+});

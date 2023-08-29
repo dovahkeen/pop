@@ -45,6 +45,12 @@ return [
             'driver' => 'session',
             'provider' => 'students',
         ],
+
+        'teachers' => [
+            'driver' => 'session',
+            'provider' => 'teachers',
+        ],
+
     ],
 
     /*
@@ -75,10 +81,10 @@ return [
             'model' => App\Models\Student::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'teachers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Teacher::class,
+        ],
     ],
 
     /*

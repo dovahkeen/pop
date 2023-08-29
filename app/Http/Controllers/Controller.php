@@ -19,7 +19,12 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function responseJson(Collection|AnonymousResourceCollection $values): JsonResponse
+    public function response(string $string, int $status = Response::HTTP_OK): JsonResponse
+    {
+        return response()->json(['message' => $string], $status);
+    }
+
+    public function responseJson(Collection|AnonymousResourceCollection|JsonResource $values): JsonResponse
     {
         return response()->json($values);
     }
