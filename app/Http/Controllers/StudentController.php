@@ -81,12 +81,17 @@ class StudentController extends Controller
 
     public function login(LoginRequest $request)
     {
+        Auth::user();
+        $request->user();
         // todo: return a token or something...
-        $wow = Auth::guard('students')->attempt($request->validated());
-        if (Auth::guard('student')->attempt($request->validated())) {
-            $request->session()->regenerate();
-
-            return redirect()->intended('dashboard');
+        if (Auth::guard('students')->attempt($request->validated())) {
+            /* @var Student $student */
+            $student = Auth::guard('students')->user();
+            $token = $student->createToken('wow', ['actions:allowed']);
+//            $token = Auth::tok
+//            $request->session()->regenerate();
+//
+//            return redirect()->intended('dashboard');
         }
 
     }
