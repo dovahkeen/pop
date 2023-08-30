@@ -11,7 +11,7 @@ class TeacherUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class TeacherUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fullName'  => 'string',
+            'full_name' => 'string',
             'email'     => 'email|required'
         ];
     }

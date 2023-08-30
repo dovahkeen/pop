@@ -22,7 +22,7 @@ class StudentUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fullName'  => 'string',
+            'full_name' => 'string',
             'grade'     => 'int|required'
         ];
     }

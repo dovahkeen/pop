@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Period;
 use App\Models\Student;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -27,23 +28,25 @@ class StudentTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
-        $this->assertDatabaseHas(Student::class, ['username' => $username]);
+        $this->assertDatabaseHas($this->model, ['username' => $username]);
     }
 
-    public function testLogin(): void
+    public function testShow()
     {
-        /* @var Student $student */
-        $student = Student::factory()->create([
-            'username'  => 'student',
-            'password'  => bcrypt('password')
-        ]);
+        /* @var Student $student  */
+        $student = $this->model::factory()->create();
 
-        $response = $this->postJson("$this->endPoint/login", [
+        $this->login();
+
+        $response = $this->getJson("$this->endPoint/$student->id");
+
+        $response->assertOk();
+        $response->assertJson([
+            'id'        => $student->id,
             'username'  => $student->username,
-            'password'  => 'password',
+            'fullName'  => $student->full_name,
+            'grade'     => $student->grade
         ]);
-
-        $response->assertStatus(200);
     }
 
     public function testIndex(): void
@@ -55,9 +58,55 @@ class StudentTest extends TestCase
         $response->assertJson([]);
     }
 
-    public function login(): void
+    public function testUpdate(): void
+    {
+        /* @var Student $student  */
+        $student = $this->model::factory()->create();
+
+        $updatedValues = [
+            'full_name' => $this->faker->name(),
+            'grade'     => $this->faker->numberBetween(0, 12)
+        ];
+
+        $this->login();
+        $response = $this->putJson("$this->endPoint/$student->id", $updatedValues);
+
+        $response->assertOk();
+        $this->assertDatabaseHas($this->model, [
+            'id'        => $student->id,
+            'full_name' => $updatedValues['full_name'],
+            'grade'     => $updatedValues['grade'],
+        ]);
+    }
+
+    public function testDestroy(): void
     {
         /* @var Student $student */
+        $student = $this->model::factory()->create();
+
+        $this->login();
+
+        $response = $this->deleteJson("$this->endPoint/$student->id");
+
+        $response->assertOk();
+        $this->assertDatabaseMissing($this->model, ['id' => $student->id]);
+    }
+
+    public function testLogin(): void
+    {
+        /* @var Student $student */
+        $student = $this->model::factory()->create(['password'  => bcrypt('password')]);
+
+        $response = $this->postJson("$this->endPoint/login", [
+            'username' => $student->username,
+            'password' => 'password',
+        ]);
+
+        $response->assertStatus(200);
+    }
+
+    public function login(): void
+    {
         $student = $this->model::factory()->create();
         $this->actingAs($student, 'sanctum');
     }

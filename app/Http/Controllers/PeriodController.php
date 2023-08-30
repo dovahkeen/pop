@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Period\PeriodStoreRequest;
+use App\Http\Resources\PeriodResource;
 use App\Models\Period;
 use App\Traits\Crud;
 use Illuminate\Http\JsonResponse;
@@ -11,20 +12,14 @@ class PeriodController extends Controller
 {
     use Crud;
 
-    protected string $model = Period::class;
+    protected string|Period $model = Period::class;
+    protected string|PeriodResource $resource = PeriodResource::class;
 
     public function getByTeacher(int $teacherId): JsonResponse
     {
         $result = Period::query()->byTeacher($teacherId)->paginate();
 
         return $this->responseJson($result);
-    }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -44,26 +39,18 @@ class PeriodController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(PeriodStoreRequest $request, Period $period)
+    public function update(PeriodStoreRequest $request, Period $period): JsonResponse
     {
-        $this->updateInstance($request->validated(), $period);
+        return $this->updateInstance($request->validated(), $period);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Period $period): JsonResponse
     {
-        //
+        return $this->deleteInstance($period);
     }
 }

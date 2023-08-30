@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\Teacher\TeacherStoreRequest;
+use App\Http\Requests\Teacher\TeacherUpdateRequest;
 use App\Http\Resources\LoginResource;
+use App\Http\Resources\TeacherResource;
 use App\Models\Student;
 use App\Models\Teacher;
 use App\Traits\Crud;
@@ -16,7 +18,8 @@ class TeacherController extends Controller
 {
     use Crud;
 
-    protected string $model = Teacher::class;
+    protected string|Teacher $model = Teacher::class;
+    protected string|TeacherResource $resource = TeacherResource::class;
 
     /**
      * Store a newly created resource in storage.
@@ -24,6 +27,30 @@ class TeacherController extends Controller
     public function store(TeacherStoreRequest $request): JsonResponse
     {
         return $this->saveInstance($request->validated());
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Teacher $teacher): JsonResponse
+    {
+        return $this->responseShowResource($teacher);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(TeacherUpdateRequest $request, Teacher $teacher): JsonResponse
+    {
+        return $this->updateInstance($request->validated(), $teacher);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Teacher $teacher): JsonResponse
+    {
+        return $this->deleteInstance($teacher);
     }
 
     public function login(LoginRequest $request): JsonResponse

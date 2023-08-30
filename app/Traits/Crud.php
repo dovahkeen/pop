@@ -2,12 +2,10 @@
 
 namespace App\Traits;
 
-use App\Models\Student;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Exception;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 trait Crud
@@ -37,6 +35,19 @@ trait Crud
         }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function deleteInstance(Model $model): JsonResponse
+    {
+        try {
+            $model->delete();
+            return $this->responseSuccess();
+        } catch (Exception $exception) {
+            return $this->responseFailed($exception);
+        }
+    }
+
     public function responseShowResource(Model $model): JsonResponse
     {
         $resource = $this->getResource();
@@ -60,8 +71,7 @@ trait Crud
 
     private function getResource(): string|JsonResource
     {
-        $modelName = str_replace(class_basename(self::class), null, class_basename(static::class));
-        return "App\\Http\\Resources\\{$modelName}Resource";
+        return $this->resource;
     }
 
     private function getModel(): string|Model
