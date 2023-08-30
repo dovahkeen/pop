@@ -37,4 +37,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('student/period/{periodId}', [StudentController::class, 'index']);
     Route::get('student/period/{periodId}/teacher/{teacherId}', [StudentController::class, 'index']);
 
+    Route::put('student/{student}/period/{period}', [StudentController::class, 'addToPeriod']);
+    Route::delete('student/{student}/period/{period}', [StudentController::class, 'removeFromPeriod']);
+
 });

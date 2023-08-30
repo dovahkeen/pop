@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Period;
+use App\Models\PeriodStudent;
 use App\Models\Student;
+use App\Models\StudentPeriod;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
@@ -90,6 +92,48 @@ class StudentTest extends TestCase
 
         $response->assertOk();
         $this->assertDatabaseMissing($this->model, ['id' => $student->id]);
+    }
+
+    public function testAddToPeriod()
+    {
+        /* @var Student $student */
+        $student = Student::factory()->create();
+
+        /* @var Period $period */
+        $period = Period::factory()->create();
+
+        $this->login();
+
+        $response = $this->putJson("$this->endPoint/$student->id/period/$period->id");
+
+        // Assertions
+        $response->assertOk();
+        $this->assertDatabaseHas(PeriodStudent::class, [
+            'student_id'    => $student->id,
+            'period_id'     => $period->id,
+        ]);
+    }
+
+    public function testRemoveFromPeriod()
+    {
+        /* @var Student $student */
+        $student = Student::factory()->create();
+
+        /* @var Period $period */
+        $period = Period::factory()->create();
+
+        $student->periods()->attach($period);
+
+        $this->login();
+
+        $response = $this->deleteJson("$this->endPoint/$student->id/period/$period->id");
+
+        // Assertions
+        $response->assertOk();
+        $this->assertDatabaseMissing(PeriodStudent::class, [
+            'student_id' => $student->id,
+            'period_id' => $period->id,
+        ]);
     }
 
     public function testLogin(): void

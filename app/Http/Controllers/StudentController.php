@@ -7,6 +7,7 @@ use App\Http\Requests\Student\StudentStoreRequest;
 use App\Http\Requests\Student\StudentUpdateRequest;
 use App\Http\Resources\LoginResource;
 use App\Http\Resources\StudentResource;
+use App\Models\Period;
 use App\Models\Student;
 use App\Traits\Crud;
 use Illuminate\Http\JsonResponse;
@@ -65,6 +66,24 @@ class StudentController extends Controller
     public function destroy(Student $student): JsonResponse
     {
         return $this->deleteInstance($student);
+    }
+
+    /**
+     * Add a student to a period.
+     */
+    public function addToPeriod(Student $student, Period $period): JsonResponse
+    {
+        $student->periods()->attach($period);
+        return $this->response('Student added to the period successfully.');
+    }
+
+    /**
+     * Remove a student to a period.
+     */
+    public function removeFromPeriod(Student $student, Period $period): JsonResponse
+    {
+        $student->periods()->detach($period->id);
+        return $this->response('Student removed from the period successfully.');
     }
 
     public function login(LoginRequest $request): JsonResponse
