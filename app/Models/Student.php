@@ -43,11 +43,11 @@ class Student extends Authenticatable
 
     public function scopeByPeriod(Builder $query, int $periodId): Builder
     {
-        return $query->whereHas('period', fn ($q) => $q->where('id', $periodId));
+        return $query->whereHas('periods', fn ($q) => $q->where('periods.id', $periodId));
     }
 
     public function scopeByTeacher(Builder $query, int $teacherId): Builder
     {
-        return $query->whereHas('teacher', fn($q) => $q->where('id', $teacherId));
+        return $query->whereHas('periods', fn ($query) => $query->where('periods.teacher_id', $teacherId));
     }
 }

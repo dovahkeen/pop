@@ -3,7 +3,6 @@
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,10 +21,6 @@ Route::post('student', [StudentController::class, 'store']);
 
 Route::post('teacher/login', [TeacherController::class, 'login']);
 Route::post('student/login', [StudentController::class, 'login']);
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 Route::middleware('auth:sanctum')->group(function(){
 

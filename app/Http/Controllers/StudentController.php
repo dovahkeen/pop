@@ -12,6 +12,7 @@ use App\Models\Student;
 use App\Traits\Crud;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class StudentController extends Controller
@@ -30,10 +31,10 @@ class StudentController extends Controller
     {
         $results = Student::query()
             ->when($periodId, fn($q) => $q->byPeriod($periodId))
-            ->when($teacherId, fn($q) => $q->beTeacher($teacherId))
+            ->when($teacherId, fn($q) => $q->byTeacher($teacherId))
             ->paginate();
 
-        return $this->responseJson(StudentResource::collection($results));
+        return $this->responseJson($this->resource::collection($results));
     }
 
     /**

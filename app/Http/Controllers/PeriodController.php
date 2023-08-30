@@ -19,7 +19,7 @@ class PeriodController extends Controller
     {
         $result = Period::query()->byTeacher($teacherId)->paginate();
 
-        return $this->responseJson($result);
+        return $this->responseJson($this->resource::collection($result));
     }
 
     /**

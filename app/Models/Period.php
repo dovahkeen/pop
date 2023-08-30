@@ -17,20 +17,16 @@ class Period extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'teacher_id'];
 
     public function teacher(): BelongsTo
     {
         return $this->belongsTo(Teacher::class);
     }
 
-    public function students(): BelongsToMany
-    {
-        return $this->belongsToMany(Student::class);
-    }
-
     public function scopeByTeacher(Builder $query, int $teacherId): Builder
     {
         return $query->whereHas('teacher', fn($q) => $q->where('id', $teacherId));
     }
+
 }

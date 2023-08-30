@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Student;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -13,9 +14,10 @@ class StudentResource extends JsonResource
     {
         return [
             'id'        => $this->id,
-            'username'  => $this->full_name,
-            'fullName'  => $this->username,
+            'username'  => $this->username,
+            'fullName'  => $this->full_name,
             'grade'     => $this->grade
         ];
     }
+
 }

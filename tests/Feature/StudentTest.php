@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Models\Period;
 use App\Models\PeriodStudent;
 use App\Models\Student;
-use App\Models\StudentPeriod;
+use App\Models\Teacher;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,6 +58,69 @@ class StudentTest extends TestCase
 
         $response->assertOk();
         $response->assertJson([]);
+    }
+
+    public function testIndexByPeriod(): void
+    {
+        // Create a period and attach students
+        /* @var Period $period */
+        $period = Period::factory()->create();
+        $students = $this->model::factory()->count(3)->create();
+        $students->each(function ($student) use ($period) {
+            $student->periods()->attach($period);
+        });
+
+        // Create another period and attach more students
+        $periodSecond = Period::factory()->create();
+        $studentsSecond = $this->model::factory()->count(3)->create();
+        $studentsSecond->each(function ($student) use ($periodSecond) {
+            $student->periods()->attach($periodSecond);
+        });
+
+        $this->login();
+        $response = $this->getJson("$this->endPoint/period/$period->id");
+
+        // Expect only the requested students by the first period
+        $response->assertOk();
+        $response->assertJsonCount(3);
+    }
+
+    public function testIndexByPeriodAndTeacher(): void
+    {
+        // Create teacher and attach periods
+        /* @var Teacher $teacher */
+        $teacher = Teacher::factory()->create();
+
+        // Create a period associated with the teacher and attach students
+        /* @var Period $period */
+        $period = Period::factory()->create(['teacher_id' => $teacher->id]);
+        $students = $this->model::factory()->count(3)->create();
+        $students->each(function ($student) use ($period) {
+            $student->periods()->attach($period);
+        });
+
+        // Create another teacher and attach periods
+        /* @var Teacher $teacher */
+        $teacherSecond = Teacher::factory()->create();
+
+        // Create another period associated with the other teacher and attach more students
+        $periodSecond = Period::factory()->create(['teacher_id' => $teacherSecond->id]);
+        $studentsSecond = $this->model::factory()->count(3)->create();
+        $studentsSecond->each(function ($student) use ($periodSecond) {
+            $student->periods()->attach($periodSecond);
+        });
+
+        // Attach the first students to more periods
+        $students->each(function ($student) use ($periodSecond) {
+            $student->periods()->attach($periodSecond);
+        });
+
+        $this->login();
+        $response = $this->getJson("$this->endPoint/period/$period->id/teacher/$teacher->id");
+
+        // Expect only the requested students by the first period
+        $response->assertOk();
+        $response->assertJsonCount(3);
     }
 
     public function testUpdate(): void

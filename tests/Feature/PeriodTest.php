@@ -53,8 +53,12 @@ class PeriodTest extends TestCase
         /* @var Period $period  */
         $period = $this->model::factory()->create();
 
+        /* @var Teacher $teacher  */
+        $teacher = Teacher::factory()->create();
+
         $updatedValues = [
-            'name' => $this->faker->name(),
+            'name'          => $this->faker->name(),
+            'teacher_id'    => $teacher->id,
         ];
 
         $this->login();
@@ -62,8 +66,9 @@ class PeriodTest extends TestCase
 
         $response->assertOk();
         $this->assertDatabaseHas($this->model, [
-            'id'    => $period->id,
-            'name'  => $updatedValues['name']
+            'id'            => $period->id,
+            'name'          => $updatedValues['name'],
+            'teacher_id'    => $teacher->id
         ]);
     }
 
@@ -78,6 +83,25 @@ class PeriodTest extends TestCase
 
         $response->assertOk();
         $this->assertDatabaseMissing($this->model, ['id' => $period->id]);
+    }
+
+    public function testGetByTeacher()
+    {
+        /* @var Teacher $teacher  */
+        $teacher = Teacher::factory()->create();
+
+        /* @var Teacher $teacherSecond  */
+        $teacherSecond = Teacher::factory()->create();
+
+        Period::factory()->count(3)->create(['teacher_id' => $teacher->id]);
+        Period::factory()->count(3)->create(['teacher_id' => $teacherSecond->id]);
+
+        $this->login();
+
+        $response = $this->getJson("$this->endPoint/teacher/$teacher->id");
+
+        $response->assertOk();
+        $response->assertJsonCount(3);
     }
 
     public function login(): void
