@@ -15,8 +15,8 @@ Run instructions:
 
 - cd docker
 - docker compose up -d
-- build.bat
-- start-in-container.bat
+- .\build.bat
+- .\start-in-container.bat
 - php artisan migrate
 
 # Mac:
