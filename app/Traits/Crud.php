@@ -8,6 +8,14 @@ use Exception;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Trait Crud
+ *
+ * This trait provides common CRUD (Create, Read, Update, Delete) operations for resources using Laravel.
+ * It encapsulates methods for handling typical CRUD operations, such as listing, updating, deleting, and creating resources.
+ * The trait assumes certain conventions in terms of model and resource class names, and it provides consistent error handling and response formatting.
+ *
+ */
 trait Crud
 {
     /**
@@ -17,7 +25,7 @@ trait Crud
      */
     public function index(): JsonResponse
     {
-        $results = $this->getModel()::query()->paginate();
+        $results = $this->getModel()::query()->get();
         $resource = $this->getResource();
         return $this->responseJson($resource::collection($results));
     }

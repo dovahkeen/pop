@@ -12,7 +12,6 @@ use App\Models\Student;
 use App\Traits\Crud;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class StudentController extends Controller
@@ -23,16 +22,20 @@ class StudentController extends Controller
     protected string|StudentResource $resource = StudentResource::class;
 
     /**
-     * Display a listing of the resource.
-     * Method getModel will return a model by the requested controller name.
-     * index will return a paginated list
+     * Display a listing of students.
+     *
+     * This method retrieves a list of student records based on optional filtering criteria.
+     *
+     * @param int|null $periodId   Optional. Filter students by the specified period ID.
+     * @param int|null $teacherId  Optional. Filter students by the specified teacher ID.
+     * @return JsonResponse
      */
     public function index(int $periodId = null, int $teacherId = null): JsonResponse
     {
         $results = Student::query()
             ->when($periodId, fn($q) => $q->byPeriod($periodId))
             ->when($teacherId, fn($q) => $q->byTeacher($teacherId))
-            ->paginate();
+            ->get();
 
         return $this->responseJson($this->resource::collection($results));
     }
@@ -87,6 +90,12 @@ class StudentController extends Controller
         return $this->response('Student removed from the period successfully.');
     }
 
+    /**
+     * Handle student login.
+     *
+     * @param LoginRequest $request
+     * @return JsonResponse
+     */
     public function login(LoginRequest $request): JsonResponse
     {
         if (Auth::guard('students')->attempt($request->validated())) {

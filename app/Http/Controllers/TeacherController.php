@@ -53,6 +53,12 @@ class TeacherController extends Controller
         return $this->deleteInstance($teacher);
     }
 
+    /**
+     * Handle teacher login.
+     *
+     * @param LoginRequest $request
+     * @return JsonResponse
+     */
     public function login(LoginRequest $request): JsonResponse
     {
         if (Auth::guard('teachers')->attempt($request->validated())) {

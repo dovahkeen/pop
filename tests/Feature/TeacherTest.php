@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Student;
 use App\Models\Teacher;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -15,6 +14,11 @@ class TeacherTest extends TestCase
     private string|Teacher $model = Teacher::class;
     private string $endPoint = '/api/teacher';
 
+    /**
+     * Test storing a new teacher record.
+     *
+     * @return void
+     */
     public function testStoreNew(): void
     {
         $this->login();
@@ -31,7 +35,12 @@ class TeacherTest extends TestCase
         $this->assertDatabaseHas($this->model, ['username' => $username]);
     }
 
-    public function testShow()
+    /**
+     * Test retrieving a specific teacher record.
+     *
+     * @return void
+     */
+    public function testShow(): void
     {
         /* @var Teacher $teacher  */
         $teacher = $this->model::factory()->create();
@@ -49,6 +58,11 @@ class TeacherTest extends TestCase
         ]);
     }
 
+    /**
+     * Test retrieving a list of teacher records.
+     *
+     * @return void
+     */
     public function testIndex(): void
     {
         $this->login();
@@ -58,6 +72,11 @@ class TeacherTest extends TestCase
         $response->assertJson([]);
     }
 
+    /**
+     * Test updating a teacher record.
+     *
+     * @return void
+     */
     public function testUpdate(): void
     {
         /* @var Teacher $teacher  */
@@ -79,6 +98,11 @@ class TeacherTest extends TestCase
         ]);
     }
 
+    /**
+     * Test deleting a teacher record.
+     *
+     * @return void
+     */
     public function testDestroy(): void
     {
         /* @var Teacher $teacher */
@@ -92,6 +116,11 @@ class TeacherTest extends TestCase
         $this->assertDatabaseMissing($this->model, ['id' => $teacher->id]);
     }
 
+    /**
+     * Test teacher login functionality.
+     *
+     * @return void
+     */
     public function testLogin(): void
     {
         /* @var Teacher $teacher */
@@ -108,6 +137,11 @@ class TeacherTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * Simulate teacher login for testing purposes.
+     *
+     * @return void
+     */
     public function login(): void
     {
         $student = $this->model::factory()->create();

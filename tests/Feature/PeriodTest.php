@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Period;
-use App\Models\Student;
 use App\Models\Teacher;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -17,7 +16,9 @@ class PeriodTest extends TestCase
     private string $endPoint = '/api/period';
 
     /**
-     * A basic feature test example.
+     * Test storing a new period record.
+     *
+     * @return void
      */
     public function testStoreNew(): void
     {
@@ -32,7 +33,12 @@ class PeriodTest extends TestCase
         $this->assertDatabaseHas($this->model, ['name' => $name]);
     }
 
-    public function testShow()
+    /**
+     * Test retrieving a specific period record.
+     *
+     * @return void
+     */
+    public function testShow(): void
     {
         /* @var Period $period  */
         $period = $this->model::factory()->create();
@@ -48,6 +54,11 @@ class PeriodTest extends TestCase
         ]);
     }
 
+    /**
+     * Test updating a period record.
+     *
+     * @return void
+     */
     public function testUpdate(): void
     {
         /* @var Period $period  */
@@ -72,6 +83,11 @@ class PeriodTest extends TestCase
         ]);
     }
 
+    /**
+     * Test deleting a period record.
+     *
+     * @return void
+     */
     public function testDestroy(): void
     {
         /* @var Period $period */
@@ -85,7 +101,12 @@ class PeriodTest extends TestCase
         $this->assertDatabaseMissing($this->model, ['id' => $period->id]);
     }
 
-    public function testGetByTeacher()
+    /**
+     * Test retrieving period records by teacher.
+     *
+     * @return void
+     */
+    public function testGetByTeacher(): void
     {
         /* @var Teacher $teacher  */
         $teacher = Teacher::factory()->create();
@@ -104,6 +125,11 @@ class PeriodTest extends TestCase
         $response->assertJsonCount(3);
     }
 
+    /**
+     * Simulate teacher login for testing purposes.
+     *
+     * @return void
+     */
     public function login(): void
     {
         $teacher = Teacher::factory()->create();

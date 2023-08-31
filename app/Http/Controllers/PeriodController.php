@@ -15,9 +15,17 @@ class PeriodController extends Controller
     protected string|Period $model = Period::class;
     protected string|PeriodResource $resource = PeriodResource::class;
 
+    /**
+     * Get periods by teacher.
+     *
+     * This method retrieves a list of period records associated with the specified teacher.
+     *
+     * @param int $teacherId The ID of the teacher.
+     * @return JsonResponse
+     */
     public function getByTeacher(int $teacherId): JsonResponse
     {
-        $result = Period::query()->byTeacher($teacherId)->paginate();
+        $result = Period::query()->byTeacher($teacherId)->get();
 
         return $this->responseJson($this->resource::collection($result));
     }

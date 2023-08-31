@@ -18,6 +18,11 @@ class StudentTest extends TestCase
     private string|Student $model = Student::class;
     private string $endPoint = '/api/student';
 
+    /**
+     * Test the creation and storage of a new student record.
+     *
+     * @return void
+     */
     public function testStoreNew(): void
     {
         $username = $this->faker->unique()->userName;
@@ -33,7 +38,12 @@ class StudentTest extends TestCase
         $this->assertDatabaseHas($this->model, ['username' => $username]);
     }
 
-    public function testShow()
+    /**
+     * Test retrieving a student's information.
+     *
+     * @return void
+     */
+    public function testShow(): void
     {
         /* @var Student $student  */
         $student = $this->model::factory()->create();
@@ -46,11 +56,16 @@ class StudentTest extends TestCase
         $response->assertJson([
             'id'        => $student->id,
             'username'  => $student->username,
-            'fullName'  => $student->full_name,
+            'full_name' => $student->full_name,
             'grade'     => $student->grade
         ]);
     }
 
+    /**
+     * Test retrieving a list of student records.
+     *
+     * @return void
+     */
     public function testIndex(): void
     {
         $this->login();
@@ -60,6 +75,11 @@ class StudentTest extends TestCase
         $response->assertJson([]);
     }
 
+    /**
+     * Test retrieving a list of student records by period.
+     *
+     * @return void
+     */
     public function testIndexByPeriod(): void
     {
         // Create a period and attach students
@@ -85,6 +105,11 @@ class StudentTest extends TestCase
         $response->assertJsonCount(3);
     }
 
+    /**
+     * Test retrieving a list of student records by period and teacher.
+     *
+     * @return void
+     */
     public function testIndexByPeriodAndTeacher(): void
     {
         // Create teacher and attach periods
@@ -100,7 +125,7 @@ class StudentTest extends TestCase
         });
 
         // Create another teacher and attach periods
-        /* @var Teacher $teacher */
+        /* @var Teacher $teacherSecond */
         $teacherSecond = Teacher::factory()->create();
 
         // Create another period associated with the other teacher and attach more students
@@ -123,6 +148,11 @@ class StudentTest extends TestCase
         $response->assertJsonCount(3);
     }
 
+    /**
+     * Test updating a student record.
+     *
+     * @return void
+     */
     public function testUpdate(): void
     {
         /* @var Student $student  */
@@ -144,6 +174,11 @@ class StudentTest extends TestCase
         ]);
     }
 
+    /**
+     * Test deleting a student record.
+     *
+     * @return void
+     */
     public function testDestroy(): void
     {
         /* @var Student $student */
@@ -157,7 +192,12 @@ class StudentTest extends TestCase
         $this->assertDatabaseMissing($this->model, ['id' => $student->id]);
     }
 
-    public function testAddToPeriod()
+    /**
+     * Test adding a student to a period.
+     *
+     * @return void
+     */
+    public function testAddToPeriod(): void
     {
         /* @var Student $student */
         $student = Student::factory()->create();
@@ -177,7 +217,12 @@ class StudentTest extends TestCase
         ]);
     }
 
-    public function testRemoveFromPeriod()
+    /**
+     * Test removing a student from a period.
+     *
+     * @return void
+     */
+    public function testRemoveFromPeriod(): void
     {
         /* @var Student $student */
         $student = Student::factory()->create();
@@ -199,6 +244,11 @@ class StudentTest extends TestCase
         ]);
     }
 
+    /**
+     * Test student login functionality.
+     *
+     * @return void
+     */
     public function testLogin(): void
     {
         /* @var Student $student */
@@ -212,6 +262,11 @@ class StudentTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * Simulate student login for testing purposes.
+     *
+     * @return void
+     */
     public function login(): void
     {
         $student = $this->model::factory()->create();
