@@ -11,10 +11,18 @@
 
 Run instructions:
 
+# Windows:
+
 - cd docker
 - docker compose up -d
 - build.bat
 - start-in-container.bat
 - php artisan migrate
 
+# Mac:
 
+- cd docker
+- docker compose up -d
+- build.bat
+- start-in-container.bat
+- php artisan migrate
