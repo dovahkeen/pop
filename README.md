@@ -23,6 +23,6 @@ Run instructions:
 
 - cd docker
 - docker compose up -d
-- build.bat
-- start-in-container.bat
+- docker run --rm -it -v ${PWD}/../:/var/www/html montebal/laradev:php80-2204 -c "composer install"
+- docker exec -it pop_api bash
 - php artisan migrate
